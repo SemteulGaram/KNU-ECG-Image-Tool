@@ -1,10 +1,33 @@
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react';
+import { css, keyframes } from '@emotion/react';
 import { NextPage } from 'next';
 import Icon from '@mdi/react';
 import { mdiFolderSearch } from '@mdi/js';
 import { open } from '@tauri-apps/api/dialog';
 import PageWrapper from 'src/components/common/page-wrapper';
+import { easeInOutCirc, easeOutBack } from 'src/utils/timing';
+
+const keyframesExpand = keyframes`
+  0% {
+    width: 0;
+    height: 0;
+  }
+  100% {
+    width: 100%;
+    height: 100%;
+  }
+`;
+const keyframesFadeIn = keyframes`
+  0% {
+    opacity: 0;
+  }
+  80% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
 
 const NoTarget: NextPage<unknown> = () => {
   const onClick = () => {
@@ -23,7 +46,7 @@ const NoTarget: NextPage<unknown> = () => {
         className="index_no_target relative w-full h-screen p-8 cursor-pointer select-none"
         onClick={onClick}
       >
-        <div className="index_no_target__content relative w-full h-full flex flex-col items-center justify-center">
+        <div className="index_no_target__wrapper relative w-full h-full flex flex-col items-center justify-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 100% 100%"
@@ -34,6 +57,7 @@ const NoTarget: NextPage<unknown> = () => {
               left: 0px;
               height: 100%;
               width: 100%;
+
               rect {
                 fill: none;
                 stroke: gray;
@@ -42,8 +66,8 @@ const NoTarget: NextPage<unknown> = () => {
                 stroke-linecap: butt;
                 stroke-dashoffset: 0;
 
-                /* https://matthewlein.com/tools/ceaser */
-                transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* easeOutBack */
+                animation: ${keyframesExpand} 1s ${easeInOutCirc} forwards;
+                transition: all 0.5s ${easeOutBack};
                 .index_no_target:hover & {
                   stroke-dashoffset: 50px;
                 }
@@ -65,15 +89,22 @@ const NoTarget: NextPage<unknown> = () => {
               clipPath="url(#insideOnly)"
             />
           </svg>
-          <Icon
-            path={mdiFolderSearch}
-            title="이미지 폴더 선택"
-            size={5}
-            color="gray"
-          />
-          {/* title text */}
-          <div className="index_no_target__content__title relative mt-4 text-2xl font-bold text-bwgray">
-            이미지 폴더를 선택해주세요
+          <div
+            className="index_no_target__content flex flex-col items-center justify-center"
+            css={css`
+              animation: ${keyframesFadeIn} 1.1s ease-in-out forwards;
+            `}
+          >
+            <Icon
+              path={mdiFolderSearch}
+              title="이미지 폴더 선택"
+              size={5}
+              color="gray"
+            />
+            {/* title text */}
+            <div className="index_no_target__content__title relative mt-4 text-2xl font-bold text-bwgray">
+              이미지 폴더를 선택해주세요
+            </div>
           </div>
         </div>
       </div>
