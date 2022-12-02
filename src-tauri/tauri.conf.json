@@ -1,0 +1,76 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/schema.json",
+  "build": {
+    "beforeBuildCommand": "npm run build && npm run export",
+    "beforeDevCommand": "npm run dev",
+    "devPath": "http://localhost:3000",
+    "distDir": "../out"
+  },
+  "package": {
+    "productName": "KNU ECG Image Tool",
+    "version": "0.1.0"
+  },
+  "tauri": {
+    "allowlist": {
+      "all": false,
+      "dialog": {
+        "all": false,
+        "open": true,
+        "save": true
+      }
+    },
+    "bundle": {
+      "active": false,
+      "category": "Medical",
+      "copyright": "MIT License",
+      "deb": {
+        "depends": []
+      },
+      "externalBin": [],
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+      ],
+      "identifier": "com.semteul.knuecgimagetool",
+      "publisher": "SemteulGaram",
+      "longDescription": "강원대학교 ECG 이미지 뷰어 + 분류 도구",
+      "macOS": {
+        "entitlements": null,
+        "exceptionDomain": "",
+        "frameworks": [],
+        "providerShortName": null,
+        "signingIdentity": null
+      },
+      "resources": [],
+      "shortDescription": "ECG 이미지 툴",
+      "targets": "all",
+      "windows": {
+        "certificateThumbprint": null,
+        "digestAlgorithm": "sha256",
+        "timestampUrl": "",
+        "allowDowngrades": true
+      }
+    },
+    "security": {
+      "csp": null
+    },
+    "updater": {
+      "active": false,
+      "windows": {
+        "installMode": "passive"
+      }
+    },
+    "windows": [
+      {
+        "fullscreen": false,
+        "height": 600,
+        "resizable": true,
+        "title": "KNU ECG Image Tool",
+        "width": 800
+      }
+    ]
+  }
+}
