@@ -58,7 +58,7 @@ export type IndexStore = {
   prev: () => void;
 };
 
-export const useIndexStore = create<IndexStore>((set, get) => ({
+export const useAppStore = create<IndexStore>((set, get) => ({
   targetFolder: '',
   imageList: [],
   index: 0,

@@ -6,6 +6,7 @@ import { mdiFolderSearch } from '@mdi/js';
 import { open } from '@tauri-apps/api/dialog';
 import PageWrapper from 'src/components/common/page-wrapper';
 import { easeInOutCirc, easeOutBack } from 'src/utils/timing';
+import usePageStateRoute from 'src/hooks/usePageStateRoute';
 
 const keyframesExpand = keyframes`
   0% {
@@ -30,6 +31,8 @@ const keyframesFadeIn = keyframes`
 `;
 
 const NoTarget: NextPage<unknown> = () => {
+  usePageStateRoute();
+
   const onClick = () => {
     open({
       title: '사진이 들어있는 폴더를 선택해주세요',
