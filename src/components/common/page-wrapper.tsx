@@ -8,7 +8,8 @@ const PageWrapper: React.FC<Props> = (props) => {
     <div
       className="page_wrapper relative w-full h-full"
       css={css`
-        min-height: 100vh;
+        min-width: 640px;
+        min-height: 400px;
       `}
     >
       {props.children}

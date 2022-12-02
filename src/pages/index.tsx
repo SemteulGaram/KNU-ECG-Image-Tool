@@ -1,5 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
+import { useEffect } from 'react';
+import { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Image from 'next/image';
 import { invoke } from '@tauri-apps/api/tauri';
@@ -7,21 +10,26 @@ import { open } from '@tauri-apps/api/dialog';
 import { useIndexStore } from '../zustand';
 import PageWrapper from '../components/common/page-wrapper';
 
-export default function Home() {
+const Home: NextPage<unknown> = () => {
+  const router = useRouter();
   const getPageState = useIndexStore((state) => state.getPageState);
-  const rootContent: React.ReactElement = <></>;
-  switch (getPageState()) {
-    case 'NO_TARGET':
-      // TODO: Fill root content
-      break;
-    case 'NO_IMAGE':
-      break;
-    case 'LOADED':
-      break;
-  }
+
+  useEffect(() => {
+    switch (getPageState()) {
+      case 'NO_TARGET':
+        router.replace('/no-target');
+        break;
+      case 'NO_IMAGE':
+        router.replace('/no-image');
+        break;
+      case 'LOADED':
+        router.replace('/loaded');
+        break;
+    }
+  }, [getPageState]);
+
   return (
     <PageWrapper>
-      {rootContent}
       <span>So here we go</span>
       <button
         onClick={() => {
@@ -38,4 +46,6 @@ export default function Home() {
       </button>
     </PageWrapper>
   );
-}
+};
+
+export default Home;
