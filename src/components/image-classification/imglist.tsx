@@ -4,7 +4,12 @@ import React from 'react';
 import { convertFileSrc } from '@tauri-apps/api/tauri';
 import ISwiper, { Virtual, Navigation, Scrollbar } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { ImageFlagHighlightColors, useAppStore } from 'src/zustand/app';
+import {
+  IImageFlag,
+  ImageFlag,
+  ImageFlagData,
+  useAppStore,
+} from 'src/zustand/app';
 
 import 'swiper/css';
 import 'swiper/css/scrollbar';
@@ -42,20 +47,18 @@ const ImageClassificationImglist: React.FC<Props> = () => {
   }, []);
 
   // colored dot generator from image flag
-  const getDot = (flag: string): React.ReactElement | null => {
-    if (!Object.keys(ImageFlagHighlightColors).includes(flag)) {
+  const getDot = (flag: IImageFlag): React.ReactElement | null => {
+    if (!ImageFlag.includes(flag)) {
       console.warn(
-        `image-classification.imglist> Image flag ${flag} is not supported.`
+        `image-classification.imglist> Image flag (${flag}) is not supported.`
       );
       return null;
     }
     return (
       <span
-        className="w-2 h-2 ml-2 rounded-full"
+        className="w-2 h-2 ml-1 rounded-full"
         css={css`
-          background-color: ${ImageFlagHighlightColors[
-            flag as keyof typeof ImageFlagHighlightColors
-          ]};
+          background-color: ${ImageFlagData[flag].highlightColor};
         `}
       ></span>
     );

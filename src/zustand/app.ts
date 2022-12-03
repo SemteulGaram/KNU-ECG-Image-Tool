@@ -2,38 +2,83 @@ import create from 'zustand';
 import { open } from '@tauri-apps/api/dialog';
 import { readDir } from '@tauri-apps/api/fs';
 import { extensionChecker } from 'src/utils/extension-checker';
+import {
+  mdiPageFirst,
+  mdiPageLast,
+  mdiPulse,
+  mdiSyncAlert,
+  mdiThumbUp,
+} from '@mdi/js';
 
-export type IImageFlag = 'NSR' | 'LBBB' | 'RBBB' | 'AF' | 'Acute mi';
+export type IImageFlag = '0' | '1' | '2' | '3' | '4';
 export const ImageFlag: IImageFlag[] = [
-  'NSR',
-  'LBBB',
-  'RBBB',
-  'AF',
-  'Acute mi',
+  '0', // NSR
+  '1', // LBBB
+  '2', // RBBB
+  '3', // AF
+  '4', // Acute mi
 ];
-export const ImageFlagColors: Record<IImageFlag, string> = {
-  // pastel red
-  NSR: '#ff8888',
-  // pastel orange
-  LBBB: '#ffcc88',
-  // pastel yellow
-  RBBB: '#ffff88',
-  // pastel green
-  AF: '#88ff88',
-  // pastel blue
-  'Acute mi': '#88ccff',
+export type IImageFlagData = {
+  name: string;
+  fullname: string;
+  iconPath: string;
+  keybind: string;
+  color: string;
+  textColor: string;
+  highlightColor: string;
+  highlightTextColor: string;
 };
-export const ImageFlagHighlightColors: Record<IImageFlag, string> = {
-  // red
-  NSR: '#ff4444',
-  // orange
-  LBBB: '#ff7744',
-  // yellow
-  RBBB: '#ffff44',
-  // green
-  AF: '#44ff44',
-  // blue
-  'Acute mi': '#4477ff',
+export const ImageFlagData: Record<IImageFlag, IImageFlagData> = {
+  0: {
+    name: 'NSR',
+    fullname: 'Normal Sinus Rhythm',
+    iconPath: mdiThumbUp,
+    keybind: '1',
+    color: '#ff8888',
+    textColor: '#000000',
+    highlightColor: '#ff4444',
+    highlightTextColor: '#ffffff',
+  },
+  1: {
+    name: 'LBBB',
+    fullname: 'Left Bundle Branch Block',
+    iconPath: mdiPageFirst,
+    keybind: '2',
+    color: '#ffcc88',
+    textColor: '#000000',
+    highlightColor: '#ff7744',
+    highlightTextColor: '#ffffff',
+  },
+  2: {
+    name: 'RBBB',
+    fullname: 'Right Bundle Branch Block',
+    iconPath: mdiPageLast,
+    keybind: '3',
+    color: '#ffff88',
+    textColor: '#000000',
+    highlightColor: '#cccc22',
+    highlightTextColor: '#ffffff',
+  },
+  3: {
+    name: 'AF',
+    fullname: 'Atrial Fibrillation',
+    iconPath: mdiPulse,
+    keybind: '4',
+    color: '#88ff88',
+    textColor: '#000000',
+    highlightColor: '#44cc44',
+    highlightTextColor: '#ffffff',
+  },
+  4: {
+    name: 'Acute mi',
+    fullname: 'Acute Myocardial Infarction',
+    iconPath: mdiSyncAlert,
+    keybind: '5',
+    color: '#88ccff',
+    textColor: '#000000',
+    highlightColor: '#4477ff',
+    highlightTextColor: '#ffffff',
+  },
 };
 
 /** Image data for image classification */
@@ -155,12 +200,24 @@ export const useAppStore = create<AppStore>((set, get) => ({
     const { index, imageList } = get();
     return index < imageList.length - 1;
   },
-  next: () => set((state) => ({ index: state.index + 1 })),
+  next: () =>
+    set((state) => {
+      if (state.index < state.imageList.length - 1) {
+        return { index: state.index + 1 };
+      }
+      return {};
+    }),
   canPrev: () => {
     const { index } = get();
     return index > 0;
   },
-  prev: () => set((state) => ({ index: state.index - 1 })),
+  prev: () =>
+    set((state) => {
+      if (state.index > 0) {
+        return { index: state.index - 1 };
+      }
+      return {};
+    }),
   setLastPageImageSelection: (isLastPageImageSelection) =>
     set({ isLastPageImageSelection }),
 }));
