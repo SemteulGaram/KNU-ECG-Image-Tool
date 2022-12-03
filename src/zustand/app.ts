@@ -49,13 +49,13 @@ export type PageRootState = 'NO_TARGET' | 'NO_IMAGE' | 'LOADED';
 
 export type AppStore = {
   targetFolder: string;
-  imageList: string[];
+  imageList: ImageData[];
   pageState: PageRootState;
   index: number;
   isLastPageImageSelection: boolean;
   setTargetFolder: (targetFolder: string) => void;
   showTargetFolderSelectDialog: () => void;
-  setImageList: (list: string[]) => void;
+  setImageList: (list: ImageData[]) => void;
   setIndex: (index: number) => void;
   canNext: () => boolean;
   next: () => void;
@@ -66,7 +66,7 @@ export type AppStore = {
 
 const _calculatePageState = (
   targetFolder: string,
-  imageList: string[]
+  imageList: ImageData[]
 ): PageRootState => {
   if (targetFolder === '') {
     return 'NO_TARGET';
@@ -121,16 +121,24 @@ export const useAppStore = create<AppStore>((set, get) => ({
       };
       getAllFiles(fileEntry);
       // TODO: remove . ?
-      const imageList = fileList.filter(
-        extensionChecker.bind(null, [
-          '.jpg',
-          '.jpeg',
-          '.png',
-          '.gif',
-          '.bmp',
-          '.tiff',
-        ])
-      );
+      const imageList = fileList
+        .filter(
+          extensionChecker.bind(null, [
+            '.jpg',
+            '.jpeg',
+            '.png',
+            '.gif',
+            '.bmp',
+            '.tiff',
+          ])
+        )
+        .map((path) => {
+          const imageData = new ImageData();
+          imageData.path = path;
+          imageData.extention = path.split('.').pop()!.toLowerCase();
+          imageData.flags = [];
+          return imageData;
+        });
 
       set({
         targetFolder,

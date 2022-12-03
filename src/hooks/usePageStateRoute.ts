@@ -12,13 +12,13 @@ const usePageStateRoute = () => {
   useEffect(() => {
     switch (pageState) {
       case 'NO_TARGET':
-        router.replace('/no-target');
+        router.push('/no-target');
         break;
       case 'NO_IMAGE':
-        router.replace('/no-image');
+        router.push('/no-image');
         break;
       case 'LOADED':
-        router.replace('/image-classification');
+        router.push('/image-classification');
         break;
     }
   }, [pageState]);

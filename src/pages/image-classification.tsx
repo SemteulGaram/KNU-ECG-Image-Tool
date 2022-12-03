@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import { convertFileSrc } from '@tauri-apps/api/tauri';
 import { NextPage } from 'next';
 import PageWrapper from 'src/components/common/page-wrapper';
+import ImageClassificationImglist from 'src/components/image-classification/imglist';
 import usePageStateRoute from 'src/hooks/usePageStateRoute';
 import { useAppStore } from 'src/zustand/app';
 
@@ -16,7 +17,7 @@ const ImageClassification: NextPage<unknown> = () => {
   return (
     <PageWrapper>
       <div
-        className="image_classification w-full h-full grid"
+        className="image_classification w-full h-full h- grid"
         css={css`
           grid-template-areas:
             'imglist imglist'
@@ -24,17 +25,18 @@ const ImageClassification: NextPage<unknown> = () => {
             'classlist menu'
             'info info';
 
-          grid-template-columns: minmax(0, 1fr) 150px;
-          grid-template-rows: 100px minmax(0, 1fr) 100px 24px;
+          grid-template-columns: minmax(0, 1fr) 128px;
+          grid-template-rows: 112px minmax(0, 1fr) 112px 24px;
         `}
       >
         <div
           className="ic__imglist"
           css={css`
             grid-area: imglist;
-            background-color: red;
           `}
-        ></div>
+        >
+          <ImageClassificationImglist />
+        </div>
         <div
           className="ic__preview"
           css={css`
@@ -44,7 +46,7 @@ const ImageClassification: NextPage<unknown> = () => {
         >
           <img
             className="w-full h-full object-contain"
-            src={convertFileSrc(imageList[index])}
+            src={convertFileSrc(imageList[index].path)}
           />
         </div>
         <div
