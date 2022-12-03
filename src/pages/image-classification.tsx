@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import React from 'react';
-import { convertFileSrc } from '@tauri-apps/api/tauri';
 import { NextPage } from 'next';
 import PageWrapper from 'src/components/common/page-wrapper';
 import ImageClassificationImglist from 'src/components/image-classification/imglist';
@@ -11,6 +10,9 @@ import ImageClassificationClasslist from 'src/components/image-classification/cl
 import ImageClassificationMenu from 'src/components/image-classification/menu';
 
 const ImageClassification: NextPage<unknown> = () => {
+  const [convertFileSrc, setConvertFileSrc] = React.useState<
+    ((filePath: string, protocol?: string | undefined) => string) | null
+  >(null);
   usePageStateRoute();
   const [index, imageList, next, prev] = useAppStore((state) => [
     state.index,
@@ -18,6 +20,17 @@ const ImageClassification: NextPage<unknown> = () => {
     state.next,
     state.prev,
   ]);
+
+  // Dynamic import tauri api
+  React.useEffect(() => {
+    import('@tauri-apps/api/tauri')
+      .then(({ convertFileSrc }) => {
+        setConvertFileSrc(convertFileSrc);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
 
   // Detect key press
   React.useEffect(() => {
@@ -58,7 +71,7 @@ const ImageClassification: NextPage<unknown> = () => {
         >
           <img
             className="w-full h-full object-contain"
-            src={convertFileSrc(imageList[index]?.path)}
+            src={convertFileSrc ? convertFileSrc(imageList[index]?.path) : '#'}
           />
         </div>
         <div

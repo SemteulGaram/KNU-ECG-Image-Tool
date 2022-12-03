@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { NextPage } from 'next';
 import { useState, useEffect } from 'react';
-import { basename } from '@tauri-apps/api/path';
 import { mdiFolderSearch } from '@mdi/js';
 import PageWrapper from 'src/components/common/page-wrapper';
 import usePageStateRoute from 'src/hooks/usePageStateRoute';
@@ -17,8 +16,13 @@ const NoTarget: NextPage<unknown> = () => {
     state.targetFolder,
   ]);
 
+  // Dynamic import tauri api
   useEffect(() => {
-    basename(targetFolder)
+    // https://github.com/tauri-apps/tauri/discussions/5271#discussioncomment-3716246
+    import('@tauri-apps/api/path')
+      .then(({ basename }) => {
+        return basename(targetFolder);
+      })
       .then((base) => {
         setBase(base);
       })
