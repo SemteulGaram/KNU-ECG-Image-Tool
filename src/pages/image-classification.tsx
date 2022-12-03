@@ -1,9 +1,18 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
+import { convertFileSrc } from '@tauri-apps/api/tauri';
 import { NextPage } from 'next';
 import PageWrapper from 'src/components/common/page-wrapper';
+import usePageStateRoute from 'src/hooks/usePageStateRoute';
+import { useAppStore } from 'src/zustand/app';
 
 const ImageClassification: NextPage<unknown> = () => {
+  usePageStateRoute();
+
+  const [index, imageList] = useAppStore((state) => [
+    state.index,
+    state.imageList,
+  ]);
   return (
     <PageWrapper>
       <div
@@ -15,8 +24,8 @@ const ImageClassification: NextPage<unknown> = () => {
             'classlist menu'
             'info info';
 
-          grid-template-columns: 1fr 150px;
-          grid-template-rows: 100px 1fr 100px 24px;
+          grid-template-columns: minmax(0, 1fr) 150px;
+          grid-template-rows: 100px minmax(0, 1fr) 100px 24px;
         `}
       >
         <div
@@ -32,7 +41,12 @@ const ImageClassification: NextPage<unknown> = () => {
             grid-area: preview;
             background-color: green;
           `}
-        ></div>
+        >
+          <img
+            className="w-full h-full object-contain"
+            src={convertFileSrc(imageList[index])}
+          />
+        </div>
         <div
           className="ic__classlist"
           css={css`
