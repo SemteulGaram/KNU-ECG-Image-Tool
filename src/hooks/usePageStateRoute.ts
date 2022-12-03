@@ -18,7 +18,7 @@ const usePageStateRoute = () => {
         router.replace('/no-image');
         break;
       case 'LOADED':
-        router.replace('/loaded');
+        router.replace('/image-classification');
         break;
     }
   }, [pageState]);

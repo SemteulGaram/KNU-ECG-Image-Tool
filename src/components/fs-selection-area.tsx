@@ -62,7 +62,7 @@ export const FsSelectionArea: React.FC<Props> = (props) => {
 
   return (
     <div
-      className="index_no_target relative w-full h-screen p-8 cursor-pointer select-none"
+      className="index_no_target relative w-full h-full p-8 cursor-pointer select-none"
       onClick={showTargetFolderSelectDialog}
     >
       <div className="index_no_target__wrapper relative w-full h-full flex flex-col items-center justify-center">
