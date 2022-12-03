@@ -1,5 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { NextPage } from 'next';
+import { useState, useEffect } from 'react';
+import { basename } from '@tauri-apps/api/path';
 import { mdiFolderSearch } from '@mdi/js';
 import PageWrapper from 'src/components/common/page-wrapper';
 import usePageStateRoute from 'src/hooks/usePageStateRoute';
@@ -8,14 +10,27 @@ import { useAppStore } from 'src/zustand/app';
 
 const NoTarget: NextPage<unknown> = () => {
   usePageStateRoute();
-  const isLastPageImageSelection = useAppStore(
-    (state) => state.isLastPageImageSelection
-  );
+
+  const [base, setBase] = useState<string>('');
+  const [isLastPageImageSelection, targetFolder] = useAppStore((state) => [
+    state.isLastPageImageSelection,
+    state.targetFolder,
+  ]);
+
+  useEffect(() => {
+    basename(targetFolder)
+      .then((base) => {
+        setBase(base);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [targetFolder]);
 
   return (
     <PageWrapper>
       <FsSelectionArea
-        title="이미지 폴더를 선택해주세요"
+        title={`${base} 폴더에 사진이 없습니다`}
         iconSvgPath={mdiFolderSearch}
         triggerIntroAnimation={isLastPageImageSelection}
       />

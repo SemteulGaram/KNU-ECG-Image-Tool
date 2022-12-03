@@ -4,9 +4,13 @@ import { useAppStore } from 'src/zustand/app';
 
 const usePageStateRoute = () => {
   const router = useRouter();
-  const getPageState = useAppStore((state) => state.getPageState);
+  const [pageState, setLastPageImageSelection] = useAppStore((state) => [
+    state.pageState,
+    state.setLastPageImageSelection,
+  ]);
+
   useEffect(() => {
-    switch (getPageState()) {
+    switch (pageState) {
       case 'NO_TARGET':
         router.replace('/no-target');
         break;
@@ -17,7 +21,15 @@ const usePageStateRoute = () => {
         router.replace('/loaded');
         break;
     }
-  }, [getPageState()]);
+  }, [pageState]);
+
+  useEffect(() => {
+    if (router.pathname === '/no-target' || router.pathname === '/no-image') {
+      setLastPageImageSelection(true);
+    } else {
+      setLastPageImageSelection(false);
+    }
+  }, []);
 };
 
 export default usePageStateRoute;

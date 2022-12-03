@@ -47,11 +47,12 @@ export class ImageData {
 
 export type PageRootState = 'NO_TARGET' | 'NO_IMAGE' | 'LOADED';
 
-export type IndexStore = {
+export type AppStore = {
   targetFolder: string;
   imageList: string[];
+  pageState: PageRootState;
   index: number;
-  getPageState: () => PageRootState;
+  isLastPageImageSelection: boolean;
   setTargetFolder: (targetFolder: string) => void;
   showTargetFolderSelectDialog: () => void;
   setImageList: (list: string[]) => void;
@@ -60,22 +61,38 @@ export type IndexStore = {
   next: () => void;
   canPrev: () => boolean;
   prev: () => void;
+  setLastPageImageSelection: (isLastPageImageSelection: boolean) => void;
 };
 
-export const useAppStore = create<IndexStore>((set, get) => ({
+const _calculatePageState = (
+  targetFolder: string,
+  imageList: string[]
+): PageRootState => {
+  if (targetFolder === '') {
+    return 'NO_TARGET';
+  }
+  if (imageList.length === 0) {
+    return 'NO_IMAGE';
+  }
+  return 'LOADED';
+};
+
+export const useAppStore = create<AppStore>((set, get) => ({
   targetFolder: '',
   imageList: [],
+  pageState: 'NO_TARGET',
   index: 0,
-  getPageState: () => {
-    if (get().targetFolder === '') {
-      return 'NO_TARGET';
-    }
-    if (get().imageList.length === 0) {
-      return 'NO_IMAGE';
-    }
-    return 'LOADED';
-  },
-  setTargetFolder: (targetFolder) => set({ targetFolder }),
+  isLastPageImageSelection: false,
+  setTargetFolder: (targetFolder) =>
+    set({
+      targetFolder,
+      pageState: _calculatePageState(targetFolder, get().imageList),
+    }),
+  setImageList: (list) =>
+    set({
+      imageList: list,
+      pageState: _calculatePageState(get().targetFolder, list),
+    }),
   showTargetFolderSelectDialog: async () => {
     try {
       const targetFolder = await open({
@@ -115,12 +132,16 @@ export const useAppStore = create<IndexStore>((set, get) => ({
         ])
       );
 
-      set({ targetFolder, imageList, index: 0 });
+      set({
+        targetFolder,
+        imageList,
+        index: 0,
+        pageState: _calculatePageState(targetFolder, imageList),
+      });
     } catch (err) {
       console.error(err);
     }
   },
-  setImageList: (list) => set({ imageList: list }),
   setIndex: (index) => set({ index }),
   canNext: () => {
     const { index, imageList } = get();
@@ -132,4 +153,6 @@ export const useAppStore = create<IndexStore>((set, get) => ({
     return index > 0;
   },
   prev: () => set((state) => ({ index: state.index - 1 })),
+  setLastPageImageSelection: (isLastPageImageSelection) =>
+    set({ isLastPageImageSelection }),
 }));
