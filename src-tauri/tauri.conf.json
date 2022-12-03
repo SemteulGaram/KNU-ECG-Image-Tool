@@ -17,6 +17,12 @@
         "all": false,
         "open": true,
         "save": true
+      },
+      "fs": {
+        "all": false,
+        "readDir": true,
+        "readFile": true,
+        "writeFile": true
       }
     },
     "bundle": {

@@ -3,10 +3,10 @@ import { css, keyframes } from '@emotion/react';
 import { NextPage } from 'next';
 import Icon from '@mdi/react';
 import { mdiFolderSearch } from '@mdi/js';
-import { open } from '@tauri-apps/api/dialog';
 import PageWrapper from 'src/components/common/page-wrapper';
 import { easeInOutCirc, easeOutBack } from 'src/utils/timing';
 import usePageStateRoute from 'src/hooks/usePageStateRoute';
+import { useAppStore } from 'src/zustand/app';
 
 const keyframesExpand = keyframes`
   0% {
@@ -32,22 +32,15 @@ const keyframesFadeIn = keyframes`
 
 const NoTarget: NextPage<unknown> = () => {
   usePageStateRoute();
-
-  const onClick = () => {
-    open({
-      title: '사진이 들어있는 폴더를 선택해주세요',
-      directory: true,
-      recursive: false,
-    }).then((result) => {
-      console.log(result);
-    });
-  };
+  const showTargetFolderSelectDialog = useAppStore(
+    (state) => state.showTargetFolderSelectDialog
+  );
 
   return (
     <PageWrapper>
       <div
         className="index_no_target relative w-full h-screen p-8 cursor-pointer select-none"
-        onClick={onClick}
+        onClick={showTargetFolderSelectDialog}
       >
         <div className="index_no_target__wrapper relative w-full h-full flex flex-col items-center justify-center">
           <svg

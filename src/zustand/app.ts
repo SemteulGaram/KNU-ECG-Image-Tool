@@ -1,4 +1,7 @@
 import create from 'zustand';
+import { open } from '@tauri-apps/api/dialog';
+import { readDir } from '@tauri-apps/api/fs';
+import { extensionChecker } from 'src/utils/extension-checker';
 
 export type IImageFlag = 'NSR' | 'LBBB' | 'RBBB' | 'AF' | 'Acute mi';
 export const ImageFlag: IImageFlag[] = [
@@ -50,6 +53,7 @@ export type IndexStore = {
   index: number;
   getPageState: () => PageRootState;
   setTargetFolder: (targetFolder: string) => void;
+  showTargetFolderSelectDialog: () => void;
   setImageList: (list: string[]) => void;
   setIndex: (index: number) => void;
   canNext: () => boolean;
@@ -72,6 +76,50 @@ export const useAppStore = create<IndexStore>((set, get) => ({
     return 'LOADED';
   },
   setTargetFolder: (targetFolder) => set({ targetFolder }),
+  showTargetFolderSelectDialog: async () => {
+    try {
+      const targetFolder = await open({
+        title: '사진이 들어있는 폴더를 선택해주세요',
+        directory: true,
+        recursive: false,
+        multiple: false,
+      });
+      if (!targetFolder || Array.isArray(targetFolder)) {
+        return; // cancel, or multiple selection
+      }
+      // read image list
+      const fileEntry = await readDir(targetFolder, {
+        recursive: true,
+      });
+      type CFileEntry = typeof fileEntry[0];
+      const fileList: string[] = [];
+      const getAllFiles = (list: CFileEntry[]) => {
+        for (const entry of list) {
+          if (entry.children) {
+            getAllFiles(entry.children);
+          } else {
+            fileList.push(entry.path);
+          }
+        }
+      };
+      getAllFiles(fileEntry);
+      // TODO: remove . ?
+      const imageList = fileList.filter(
+        extensionChecker.bind(null, [
+          '.jpg',
+          '.jpeg',
+          '.png',
+          '.gif',
+          '.bmp',
+          '.tiff',
+        ])
+      );
+
+      set({ targetFolder, imageList, index: 0 });
+    } catch (err) {
+      console.error(err);
+    }
+  },
   setImageList: (list) => set({ imageList: list }),
   setIndex: (index) => set({ index }),
   canNext: () => {
