@@ -2,35 +2,32 @@
 import { css } from '@emotion/react';
 import React from 'react';
 import { NextPage } from 'next';
+import { ToastContainer, toast } from 'react-toastify';
 import PageWrapper from 'src/components/common/page-wrapper';
 import ImageClassificationImglist from 'src/components/image-classification/imglist';
 import usePageStateRoute from 'src/hooks/usePageStateRoute';
 import { useAppStore } from 'src/zustand/app';
 import ImageClassificationClasslist from 'src/components/image-classification/classlist';
 import ImageClassificationMenu from 'src/components/image-classification/menu';
+import ImageClassificationPreview from 'src/components/image-classification/preview';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 const ImageClassification: NextPage<unknown> = () => {
-  const [convertFileSrc, setConvertFileSrc] = React.useState<
-    ((filePath: string, protocol?: string | undefined) => string) | null
-  >(null);
   usePageStateRoute();
-  const [index, imageList, next, prev] = useAppStore((state) => [
-    state.index,
+  const [
+    imageList,
+    next,
+    prev,
+    alertKeyboardShortcut,
+    setAlertKeyboardShortcut,
+  ] = useAppStore((state) => [
     state.imageList,
     state.next,
     state.prev,
+    state.alertKeyboardShortcut,
+    state.setAlertKeyboardShortcut,
   ]);
-
-  // Dynamic import tauri api
-  React.useEffect(() => {
-    import('@tauri-apps/api/tauri')
-      .then(({ convertFileSrc }) => {
-        setConvertFileSrc(convertFileSrc);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, []);
 
   // Detect key press
   React.useEffect(() => {
@@ -47,19 +44,40 @@ const ImageClassification: NextPage<unknown> = () => {
     };
   }, [imageList, next, prev]);
 
+  React.useEffect(() => {
+    // One time toast
+    if (alertKeyboardShortcut) {
+      return;
+    }
+
+    // in dev mode, toast might show twice because of react strict mode (see more: https://stackoverflow.com/a/72238236/8274779)
+    toast.info(
+      <>
+        ⌨️ 키보드 단축키 사용 가능:
+        <br />
+        이전(←) 다음(→) 플래그(숫자키)
+      </>,
+      {
+        bodyStyle: {
+          width: '880',
+        },
+      }
+    );
+    setAlertKeyboardShortcut(true);
+  }, [alertKeyboardShortcut]);
+
   return (
     <PageWrapper>
       <div
-        className="image_classification w-full h-full h- grid"
+        className="image_classification w-full h-full grid"
         css={css`
           grid-template-areas:
             'preview preview'
             'imglist imglist'
-            'classlist menu'
-            'info info';
+            'classlist menu';
 
           grid-template-columns: minmax(0, 1fr) 128px;
-          grid-template-rows: minmax(0, 1fr) 112px 112px 24px;
+          grid-template-rows: minmax(0, 1fr) 112px 112px;
         `}
       >
         <div
@@ -69,10 +87,7 @@ const ImageClassification: NextPage<unknown> = () => {
             /* background-color: rgba(127, 127, 127, 0.5); */
           `}
         >
-          <img
-            className="w-full h-full object-contain"
-            src={convertFileSrc ? convertFileSrc(imageList[index]?.path) : '#'}
-          />
+          <ImageClassificationPreview />
         </div>
         <div
           className="ic__classlist"
@@ -98,15 +113,15 @@ const ImageClassification: NextPage<unknown> = () => {
         >
           <ImageClassificationMenu />
         </div>
-        <div
-          className="image_classification__info"
-          css={css`
-            grid-area: info;
-          `}
-        >
-          이전 이미지(←)&nbsp;&nbsp;&nbsp;&nbsp;다음 이미지(→)
-        </div>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        closeOnClick
+        pauseOnFocusLoss
+        pauseOnHover
+        theme="dark"
+      />
     </PageWrapper>
   );
 };

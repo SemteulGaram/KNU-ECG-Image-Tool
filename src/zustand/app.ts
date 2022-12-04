@@ -98,6 +98,7 @@ export type AppStore = {
   pageState: PageRootState;
   index: number;
   isLastPageImageSelection: boolean;
+  alertKeyboardShortcut: boolean;
   setTargetFolder: (targetFolder: string) => void;
   showTargetFolderSelectDialog: () => void;
   setImageList: (list: ImageData[]) => void;
@@ -107,6 +108,7 @@ export type AppStore = {
   canPrev: () => boolean;
   prev: () => void;
   setLastPageImageSelection: (isLastPageImageSelection: boolean) => void;
+  setAlertKeyboardShortcut: (alertKeyboardShortcut: boolean) => void;
 };
 
 const _calculatePageState = (
@@ -128,6 +130,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
   pageState: 'NO_TARGET',
   index: 0,
   isLastPageImageSelection: false,
+  alertKeyboardShortcut: false,
   setTargetFolder: (targetFolder) =>
     set({
       targetFolder,
@@ -220,4 +223,6 @@ export const useAppStore = create<AppStore>((set, get) => ({
     }),
   setLastPageImageSelection: (isLastPageImageSelection) =>
     set({ isLastPageImageSelection }),
+  setAlertKeyboardShortcut: (alertKeyboardShortcut) =>
+    set({ alertKeyboardShortcut }),
 }));
