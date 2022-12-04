@@ -12,6 +12,7 @@ import ImageClassificationMenu from 'src/components/image-classification/menu';
 import ImageClassificationPreview from 'src/components/image-classification/preview';
 
 import 'react-toastify/dist/ReactToastify.css';
+import { useImageClassificationStore } from 'src/zustand/image-classification';
 
 const ImageClassification: NextPage<unknown> = () => {
   usePageStateRoute();
@@ -28,6 +29,13 @@ const ImageClassification: NextPage<unknown> = () => {
     state.alertKeyboardShortcut,
     state.setAlertKeyboardShortcut,
   ]);
+
+  const [toastContainer, setToast, setToastContainer] =
+    useImageClassificationStore((state) => [
+      state.toastContainer,
+      state.setToast,
+      state.setToastContainer,
+    ]);
 
   // Detect key press
   React.useEffect(() => {
@@ -66,6 +74,23 @@ const ImageClassification: NextPage<unknown> = () => {
     setAlertKeyboardShortcut(true);
   }, [alertKeyboardShortcut]);
 
+  // Toast effect
+  React.useEffect(() => {
+    if (!toastContainer) {
+      setToastContainer(
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          closeOnClick
+          pauseOnFocusLoss
+          pauseOnHover
+          theme="dark"
+        />
+      );
+      setToast(toast);
+    }
+  }, [toastContainer]);
+
   return (
     <PageWrapper>
       <div
@@ -76,7 +101,7 @@ const ImageClassification: NextPage<unknown> = () => {
             'imglist imglist'
             'classlist menu';
 
-          grid-template-columns: minmax(0, 1fr) 128px;
+          grid-template-columns: minmax(0, 1fr) 180px;
           grid-template-rows: minmax(0, 1fr) 112px 112px;
         `}
       >
@@ -114,14 +139,7 @@ const ImageClassification: NextPage<unknown> = () => {
           <ImageClassificationMenu />
         </div>
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        closeOnClick
-        pauseOnFocusLoss
-        pauseOnHover
-        theme="dark"
-      />
+      {toastContainer}
     </PageWrapper>
   );
 };

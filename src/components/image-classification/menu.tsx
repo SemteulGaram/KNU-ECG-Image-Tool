@@ -1,14 +1,53 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import React from 'react';
-import { mdiMicrosoftExcel } from '@mdi/js';
+import { mdiFolderOpen, mdiMicrosoftExcel } from '@mdi/js';
 import Icon from '@mdi/react';
+import { useAppStore } from 'src/zustand/app';
+import { useImageClassificationStore } from 'src/zustand/image-classification';
 
 export type Props = unknown;
 const ImageClassificationMenu: React.FC<Props> = () => {
-  const saveExcel = () => {
+  const [exportExcel, showTargetFolderSelectDialog] = useAppStore((state) => [
+    state.exportExcel,
+    state.showTargetFolderSelectDialog,
+  ]);
+  const [toast] = useImageClassificationStore((state) => [state.toast]);
+
+  const saveExcel = async () => {
     console.log('saveExcel');
-    // TODO: save excel
+    const exportPromise = exportExcel('_summary', 'csv');
+    toast?.promise(exportPromise, {
+      pending: '저장 중...',
+      success: {
+        render({ data }) {
+          return (
+            <>
+              다음 위치에 저장되었습니다
+              <br />
+              {'' + data}
+            </>
+          );
+        },
+      },
+      error: {
+        render({ data }) {
+          return (
+            <>
+              저장에 실패했습니다
+              <br />
+              {'' + data}
+            </>
+          );
+        },
+        autoClose: false,
+      },
+    });
+    console.log('savedExcel');
+  };
+
+  const openFolder = () => {
+    showTargetFolderSelectDialog();
   };
 
   // keybind detect
@@ -19,6 +58,11 @@ const ImageClassificationMenu: React.FC<Props> = () => {
         e.preventDefault();
         saveExcel();
       }
+      // Ctrl + O or Cmd + O
+      if ((e.ctrlKey && e.key === 'o') || (e.metaKey && e.key === 'o')) {
+        e.preventDefault();
+        openFolder();
+      }
     };
     window.addEventListener('keydown', keydownHandler);
     return () => {
@@ -27,9 +71,30 @@ const ImageClassificationMenu: React.FC<Props> = () => {
   }, []);
 
   return (
-    <div className="icm relative w-full h-full flex flex-col justify-center items-center gap-4">
+    <div className="icm relative w-full h-full flex flex-row justify-evenly items-center">
       <button
-        className="icm__btn relative w-28 h-24 flex flex-col justify-center items-center rounded-sm text-sm cursor-pointer"
+        className="icm__btn relative w-20 h-24 flex flex-col justify-center items-center rounded-sm text-xs cursor-pointer"
+        css={css`
+          background-color: #cccccc;
+          color: #000000;
+          transition: all 0.2s ease-in-out;
+          &:hover {
+            // cyan color
+            background-color: #008888;
+            color: #ffffff;
+          }
+          & > span {
+            background-color: transparent;
+            color: inherit;
+          }
+        `}
+        onClick={openFolder}
+      >
+        <Icon path={mdiFolderOpen} size={2} />
+        폴더 열기 <p className="text-xs">(Cmd + O)</p>
+      </button>
+      <button
+        className="icm__btn relative w-20 h-24 flex flex-col justify-center items-center rounded-sm text-xs cursor-pointer"
         css={css`
           background-color: #cccccc;
           color: #000000;
@@ -47,7 +112,7 @@ const ImageClassificationMenu: React.FC<Props> = () => {
         onClick={saveExcel}
       >
         <Icon path={mdiMicrosoftExcel} size={2} />
-        Export (Cmd + S)
+        보고서 저장 <p className="text-xs">(Cmd + S)</p>
       </button>
     </div>
   );

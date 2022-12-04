@@ -1,7 +1,8 @@
 import create from 'zustand';
+import * as XLSX from 'xlsx';
 import { open } from '@tauri-apps/api/dialog';
-import { readDir } from '@tauri-apps/api/fs';
-import { extensionChecker } from 'src/utils/extension-checker';
+import { readDir, writeBinaryFile } from '@tauri-apps/api/fs';
+import { join } from '@tauri-apps/api/path';
 import {
   mdiPageFirst,
   mdiPageLast,
@@ -9,6 +10,7 @@ import {
   mdiSyncAlert,
   mdiThumbUp,
 } from '@mdi/js';
+import { extensionChecker } from 'src/utils/extension-checker';
 
 export type IImageFlag = '0' | '1' | '2' | '3' | '4';
 export const ImageFlag: IImageFlag[] = [
@@ -29,7 +31,7 @@ export type IImageFlagData = {
   highlightTextColor: string;
 };
 export const ImageFlagData: Record<IImageFlag, IImageFlagData> = {
-  0: {
+  '0': {
     name: 'NSR',
     fullname: 'Normal Sinus Rhythm',
     iconPath: mdiThumbUp,
@@ -39,7 +41,7 @@ export const ImageFlagData: Record<IImageFlag, IImageFlagData> = {
     highlightColor: '#ff4444',
     highlightTextColor: '#ffffff',
   },
-  1: {
+  '1': {
     name: 'LBBB',
     fullname: 'Left Bundle Branch Block',
     iconPath: mdiPageFirst,
@@ -49,7 +51,7 @@ export const ImageFlagData: Record<IImageFlag, IImageFlagData> = {
     highlightColor: '#ff7744',
     highlightTextColor: '#ffffff',
   },
-  2: {
+  '2': {
     name: 'RBBB',
     fullname: 'Right Bundle Branch Block',
     iconPath: mdiPageLast,
@@ -59,7 +61,7 @@ export const ImageFlagData: Record<IImageFlag, IImageFlagData> = {
     highlightColor: '#cccc22',
     highlightTextColor: '#ffffff',
   },
-  3: {
+  '3': {
     name: 'AF',
     fullname: 'Atrial Fibrillation',
     iconPath: mdiPulse,
@@ -69,7 +71,7 @@ export const ImageFlagData: Record<IImageFlag, IImageFlagData> = {
     highlightColor: '#44cc44',
     highlightTextColor: '#ffffff',
   },
-  4: {
+  '4': {
     name: 'Acute mi',
     fullname: 'Acute Myocardial Infarction',
     iconPath: mdiSyncAlert,
@@ -109,6 +111,14 @@ export type AppStore = {
   prev: () => void;
   setLastPageImageSelection: (isLastPageImageSelection: boolean) => void;
   setAlertKeyboardShortcut: (alertKeyboardShortcut: boolean) => void;
+  /**
+   * Export excel file on target folder
+   *
+   * @param {string} filename Save filename without extension
+   * @param {string} fileType 'xlsx' or 'csv'
+   * @returns {Promise<string>} Path of saved file
+   */
+  exportExcel: (filename: string, fileType: 'xlsx' | 'csv') => Promise<string>;
 };
 
 const _calculatePageState = (
@@ -225,4 +235,32 @@ export const useAppStore = create<AppStore>((set, get) => ({
     set({ isLastPageImageSelection }),
   setAlertKeyboardShortcut: (alertKeyboardShortcut) =>
     set({ alertKeyboardShortcut }),
+  exportExcel: async (filename, fileType) => {
+    const { imageList } = get();
+
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.json_to_sheet(
+      imageList.map((imageData) => {
+        const lineData: Record<string, string> = {
+          path: imageData.path,
+        };
+        for (const flag in ImageFlagData) {
+          lineData[ImageFlagData[flag as IImageFlag].name] =
+            imageData.flags.includes(flag as IImageFlag) ? 'O' : '';
+        }
+        return lineData;
+      })
+    );
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    const buffer = XLSX.write(wb, {
+      bookType: fileType,
+      type: 'buffer',
+    });
+    const exportFilePath = await join(
+      get().targetFolder,
+      `${filename || 'export'}.${fileType}`
+    );
+    await writeBinaryFile(exportFilePath, buffer);
+    return exportFilePath;
+  },
 }));

@@ -109,7 +109,7 @@ const ImageClassificationImglist: React.FC<Props> = () => {
       >
         {imageList.map((image, i) => (
           <SwiperSlide key={image.path} virtualIndex={i}>
-            <div className="icil__item relative w-32 h-24">
+            <div className="icil__item relative w-32 h-24 cursor-pointer">
               <img
                 className="absolute top-0 left-0 w-full h-full object-cover select-none rounded-md"
                 src={convertFileSrc(image.path)}
