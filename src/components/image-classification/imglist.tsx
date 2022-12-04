@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import React from 'react';
-import { convertFileSrc } from '@tauri-apps/api/tauri';
 import ISwiper, { Virtual, Navigation, Scrollbar } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import {
@@ -10,6 +9,7 @@ import {
   ImageFlagData,
   useAppStore,
 } from 'src/zustand/app';
+import { getTauriModule } from 'src/tauri/lazy-api';
 
 import 'swiper/css';
 import 'swiper/css/scrollbar';
@@ -112,7 +112,7 @@ const ImageClassificationImglist: React.FC<Props> = () => {
             <div className="icil__item relative w-32 h-24 cursor-pointer">
               <img
                 className="absolute top-0 left-0 w-full h-full object-cover select-none rounded-md"
-                src={convertFileSrc(image.path)}
+                src={getTauriModule().tauri.convertFileSrc(image.path)}
               />
               <div className="icil__item__footer absolute bottom-0 left-0 w-full h-4 flex flex-row justify-between items-center bg-black bg-opacity-50 text-white text-xs">
                 <div className="icil__item__footer__dotcontainer flex items-center justify-center h-full">

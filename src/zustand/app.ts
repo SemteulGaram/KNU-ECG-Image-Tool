@@ -1,8 +1,5 @@
 import create from 'zustand';
 import * as XLSX from 'xlsx';
-import { open } from '@tauri-apps/api/dialog';
-import { readDir, writeBinaryFile } from '@tauri-apps/api/fs';
-import { join } from '@tauri-apps/api/path';
 import {
   mdiPageFirst,
   mdiPageLast,
@@ -11,6 +8,7 @@ import {
   mdiThumbUp,
 } from '@mdi/js';
 import { extensionChecker } from 'src/utils/extension-checker';
+import { getTauriModule } from 'src/tauri/lazy-api';
 
 export type IImageFlag = '0' | '1' | '2' | '3' | '4';
 export const ImageFlag: IImageFlag[] = [
@@ -153,7 +151,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
     }),
   showTargetFolderSelectDialog: async () => {
     try {
-      const targetFolder = await open({
+      const targetFolder = await getTauriModule().dialog.open({
         title: '사진이 들어있는 폴더를 선택해주세요',
         directory: true,
         recursive: false,
@@ -163,7 +161,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
         return; // cancel, or multiple selection
       }
       // read image list
-      const fileEntry = await readDir(targetFolder, {
+      const fileEntry = await getTauriModule().fs.readDir(targetFolder, {
         recursive: true,
       });
       type CFileEntry = typeof fileEntry[0];
@@ -256,11 +254,11 @@ export const useAppStore = create<AppStore>((set, get) => ({
       bookType: fileType,
       type: 'buffer',
     });
-    const exportFilePath = await join(
+    const exportFilePath: string = await getTauriModule().path.join(
       get().targetFolder,
       `${filename || 'export'}.${fileType}`
     );
-    await writeBinaryFile(exportFilePath, buffer);
+    await getTauriModule().fs.writeBinaryFile(exportFilePath, buffer);
     return exportFilePath;
   },
 }));

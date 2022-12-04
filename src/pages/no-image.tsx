@@ -6,6 +6,8 @@ import PageWrapper from 'src/components/common/page-wrapper';
 import usePageStateRoute from 'src/hooks/usePageStateRoute';
 import FsSelectionArea from 'src/components/fs-selection-area';
 import { useAppStore } from 'src/zustand/app';
+import { isBrowser } from 'src/utils/dom-tool';
+import { getTauriModule } from 'src/tauri/lazy-api';
 
 const NoTarget: NextPage<unknown> = () => {
   usePageStateRoute();
@@ -18,11 +20,10 @@ const NoTarget: NextPage<unknown> = () => {
 
   // Dynamic import tauri api
   useEffect(() => {
-    // https://github.com/tauri-apps/tauri/discussions/5271#discussioncomment-3716246
-    import('@tauri-apps/api/path')
-      .then(({ basename }) => {
-        return basename(targetFolder);
-      })
+    if (!isBrowser()) return;
+
+    getTauriModule()
+      .path.basename(targetFolder)
       .then((base) => {
         setBase(base);
       })

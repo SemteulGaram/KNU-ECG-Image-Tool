@@ -91,7 +91,7 @@ const ImageClassificationMenu: React.FC<Props> = () => {
         onClick={openFolder}
       >
         <Icon path={mdiFolderOpen} size={2} />
-        폴더 열기 <p className="text-xs">(Cmd + O)</p>
+        폴더 열기 <p className="text-xs">(Ctrl + O)</p>
       </button>
       <button
         className="icm__btn relative w-20 h-24 flex flex-col justify-center items-center rounded-sm text-xs cursor-pointer"
@@ -112,7 +112,7 @@ const ImageClassificationMenu: React.FC<Props> = () => {
         onClick={saveExcel}
       >
         <Icon path={mdiMicrosoftExcel} size={2} />
-        보고서 저장 <p className="text-xs">(Cmd + S)</p>
+        보고서 저장 <p className="text-xs">(Ctrl + S)</p>
       </button>
     </div>
   );

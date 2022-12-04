@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import React from 'react';
-import { convertFileSrc } from '@tauri-apps/api/tauri';
 import { useAppStore } from 'src/zustand/app';
 import { isBrowser } from 'src/utils/dom-tool';
+import { getTauriModule } from 'src/tauri/lazy-api';
 
 // Single image preview with zoom control via mouse wheel and touch
 export type Props = unknown;
@@ -154,7 +154,9 @@ const ImageClassificationPreview: React.FC<Props> = () => {
     >
       <img
         className="w-full h-full object-contain"
-        src={isBrowser() ? convertFileSrc(cImage?.path) : ''}
+        src={
+          isBrowser() ? getTauriModule().tauri.convertFileSrc(cImage?.path) : ''
+        }
         draggable="false"
         // Zoom control
         css={css`
