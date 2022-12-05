@@ -2,7 +2,6 @@
 import { css } from '@emotion/react';
 import React from 'react';
 import { NextPage } from 'next';
-import { ToastContainer, toast } from 'react-toastify';
 import PageWrapper from 'src/components/common/page-wrapper';
 import ImageClassificationImglist from 'src/components/image-classification/imglist';
 import usePageStateRoute from 'src/hooks/usePageStateRoute';
@@ -10,12 +9,11 @@ import { useAppStore } from 'src/zustand/app';
 import ImageClassificationClasslist from 'src/components/image-classification/classlist';
 import ImageClassificationMenu from 'src/components/image-classification/menu';
 import ImageClassificationPreview from 'src/components/image-classification/preview';
-
-import 'react-toastify/dist/ReactToastify.css';
-import { useImageClassificationStore } from 'src/zustand/image-classification';
+import useGlobalToast from 'src/hooks/useGlobalToast';
 
 const ImageClassification: NextPage<unknown> = () => {
   usePageStateRoute();
+  const { toast, toastContainer } = useGlobalToast();
   const [
     imageList,
     next,
@@ -29,13 +27,6 @@ const ImageClassification: NextPage<unknown> = () => {
     state.alertKeyboardShortcut,
     state.setAlertKeyboardShortcut,
   ]);
-
-  const [toastContainer, setToast, setToastContainer] =
-    useImageClassificationStore((state) => [
-      state.toastContainer,
-      state.setToast,
-      state.setToastContainer,
-    ]);
 
   // Detect key press
   React.useEffect(() => {
@@ -59,37 +50,15 @@ const ImageClassification: NextPage<unknown> = () => {
     }
 
     // in dev mode, toast might show twice because of react strict mode (see more: https://stackoverflow.com/a/72238236/8274779)
-    toast.info(
+    toast?.info(
       <>
         ⌨️ 키보드 단축키 사용 가능:
         <br />
         이전(←) 다음(→) 플래그(숫자키)
-      </>,
-      {
-        bodyStyle: {
-          width: '880',
-        },
-      }
+      </>
     );
     setAlertKeyboardShortcut(true);
   }, [alertKeyboardShortcut]);
-
-  // Toast effect
-  React.useEffect(() => {
-    if (!toastContainer) {
-      setToastContainer(
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          closeOnClick
-          pauseOnFocusLoss
-          pauseOnHover
-          theme="dark"
-        />
-      );
-      setToast(toast);
-    }
-  }, [toastContainer]);
 
   return (
     <PageWrapper>
@@ -109,7 +78,8 @@ const ImageClassification: NextPage<unknown> = () => {
           className="ic__preview overflow-hidden"
           css={css`
             grid-area: preview;
-            /* background-color: rgba(127, 127, 127, 0.5); */
+            background-color: rgba(127, 127, 127, 0.1);
+            box-shadow: inset 0 -10px 5px -5px rgba(127, 127, 127, 0.2);
           `}
         >
           <ImageClassificationPreview />
@@ -126,6 +96,7 @@ const ImageClassification: NextPage<unknown> = () => {
           className="ic__imglist"
           css={css`
             grid-area: imglist;
+            background-color: rgba(127, 127, 127, 0.05);
           `}
         >
           <ImageClassificationImglist />

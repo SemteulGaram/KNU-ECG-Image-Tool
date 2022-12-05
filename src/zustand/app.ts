@@ -1,5 +1,6 @@
 import create from 'zustand';
 import * as XLSX from 'xlsx';
+import { toast as _toast } from 'react-toastify';
 import {
   mdiPageFirst,
   mdiPageLast,
@@ -34,7 +35,7 @@ export const ImageFlagData: Record<IImageFlag, IImageFlagData> = {
     fullname: 'Normal Sinus Rhythm',
     iconPath: mdiThumbUp,
     keybind: '1',
-    color: '#ff8888',
+    color: '#cccccc',
     textColor: '#000000',
     highlightColor: '#ff4444',
     highlightTextColor: '#ffffff',
@@ -44,7 +45,7 @@ export const ImageFlagData: Record<IImageFlag, IImageFlagData> = {
     fullname: 'Left Bundle Branch Block',
     iconPath: mdiPageFirst,
     keybind: '2',
-    color: '#ffcc88',
+    color: '#cccccc',
     textColor: '#000000',
     highlightColor: '#ff7744',
     highlightTextColor: '#ffffff',
@@ -54,7 +55,7 @@ export const ImageFlagData: Record<IImageFlag, IImageFlagData> = {
     fullname: 'Right Bundle Branch Block',
     iconPath: mdiPageLast,
     keybind: '3',
-    color: '#ffff88',
+    color: '#cccccc',
     textColor: '#000000',
     highlightColor: '#cccc22',
     highlightTextColor: '#ffffff',
@@ -64,7 +65,7 @@ export const ImageFlagData: Record<IImageFlag, IImageFlagData> = {
     fullname: 'Atrial Fibrillation',
     iconPath: mdiPulse,
     keybind: '4',
-    color: '#88ff88',
+    color: '#cccccc',
     textColor: '#000000',
     highlightColor: '#44cc44',
     highlightTextColor: '#ffffff',
@@ -74,7 +75,7 @@ export const ImageFlagData: Record<IImageFlag, IImageFlagData> = {
     fullname: 'Acute Myocardial Infarction',
     iconPath: mdiSyncAlert,
     keybind: '5',
-    color: '#88ccff',
+    color: '#cccccc',
     textColor: '#000000',
     highlightColor: '#4477ff',
     highlightTextColor: '#ffffff',
@@ -90,6 +91,17 @@ export class ImageData {
   flags!: IImageFlag[];
 }
 
+export type TauriUpdateResponse = {
+  body: string;
+  date: string;
+  version: string;
+};
+
+export type TauriUpdatingResponse = {
+  status: 'ERROR' | 'PENDING' | 'DONE';
+  error: string | null;
+};
+
 export type PageRootState = 'NO_TARGET' | 'NO_IMAGE' | 'LOADED';
 
 export type AppStore = {
@@ -99,6 +111,9 @@ export type AppStore = {
   index: number;
   isLastPageImageSelection: boolean;
   alertKeyboardShortcut: boolean;
+  isUpdateCheckRequested: boolean;
+  toastContainer: React.ReactElement | null;
+  toast: typeof _toast | null;
   setTargetFolder: (targetFolder: string) => void;
   showTargetFolderSelectDialog: () => void;
   setImageList: (list: ImageData[]) => void;
@@ -117,6 +132,10 @@ export type AppStore = {
    * @returns {Promise<string>} Path of saved file
    */
   exportExcel: (filename: string, fileType: 'xlsx' | 'csv') => Promise<string>;
+  checkUpdate: () => Promise<TauriUpdateResponse>;
+  doUpdate: () => Promise<void>;
+  setToastContainer: (toastContainer: React.ReactElement) => void;
+  setToast: (toast: typeof _toast) => void;
 };
 
 const _calculatePageState = (
@@ -139,6 +158,9 @@ export const useAppStore = create<AppStore>((set, get) => ({
   index: 0,
   isLastPageImageSelection: false,
   alertKeyboardShortcut: false,
+  isUpdateCheckRequested: false,
+  toastContainer: null,
+  toast: _toast,
   setTargetFolder: (targetFolder) =>
     set({
       targetFolder,
@@ -261,4 +283,52 @@ export const useAppStore = create<AppStore>((set, get) => ({
     await getTauriModule().fs.writeBinaryFile(exportFilePath, buffer);
     return exportFilePath;
   },
+  checkUpdate: async () => {
+    set({ isUpdateCheckRequested: true });
+    return new Promise<TauriUpdateResponse>((resolve, reject) => {
+      let isEnd = false;
+      const __timeout = setTimeout(() => {
+        if (isEnd) return;
+        console.log('Update timeout');
+        isEnd = true;
+        reject('timeout');
+      }, 20000);
+
+      getTauriModule().event.listen<TauriUpdateResponse>(
+        'tauri://update-available',
+        (res) => {
+          console.log('Update available', res.payload);
+          if (isEnd) return;
+          isEnd = true;
+          resolve(res.payload);
+        }
+      );
+
+      console.log('Checking for update...');
+      getTauriModule().event.emit('tauri://update');
+    });
+  },
+  doUpdate: async () => {
+    return new Promise<void>((resolve, reject) => {
+      getTauriModule().event.listen<TauriUpdatingResponse>(
+        'tauri://update-status',
+        (res) => {
+          console.log('Update updater status', res.payload.status);
+          switch (res.payload.status) {
+            case 'ERROR':
+              reject(res.payload.error);
+              break;
+            case 'DONE':
+              resolve();
+              break;
+          }
+        }
+      );
+
+      console.log('Update start');
+      getTauriModule().event.emit('tauri://update-install');
+    });
+  },
+  setToastContainer: (toastContainer) => set({ toastContainer }),
+  setToast: (toast) => set({ toast }),
 }));

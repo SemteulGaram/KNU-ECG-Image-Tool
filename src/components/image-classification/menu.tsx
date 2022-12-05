@@ -4,15 +4,15 @@ import React from 'react';
 import { mdiFolderOpen, mdiMicrosoftExcel } from '@mdi/js';
 import Icon from '@mdi/react';
 import { useAppStore } from 'src/zustand/app';
-import { useImageClassificationStore } from 'src/zustand/image-classification';
+import useGlobalToast from 'src/hooks/useGlobalToast';
 
 export type Props = unknown;
 const ImageClassificationMenu: React.FC<Props> = () => {
+  const { toast } = useGlobalToast();
   const [exportExcel, showTargetFolderSelectDialog] = useAppStore((state) => [
     state.exportExcel,
     state.showTargetFolderSelectDialog,
   ]);
-  const [toast] = useImageClassificationStore((state) => [state.toast]);
 
   const saveExcel = async () => {
     console.log('saveExcel');

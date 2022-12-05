@@ -8,9 +8,11 @@ import FsSelectionArea from 'src/components/fs-selection-area';
 import { useAppStore } from 'src/zustand/app';
 import { isBrowser } from 'src/utils/dom-tool';
 import { getTauriModule } from 'src/tauri/lazy-api';
+import useGlobalToast from 'src/hooks/useGlobalToast';
 
 const NoTarget: NextPage<unknown> = () => {
   usePageStateRoute();
+  const { toastContainer } = useGlobalToast();
 
   const [base, setBase] = useState<string>('');
   const [isLastPageImageSelection, targetFolder] = useAppStore((state) => [
@@ -39,6 +41,7 @@ const NoTarget: NextPage<unknown> = () => {
         iconSvgPath={mdiFolderSearch}
         triggerIntroAnimation={isLastPageImageSelection}
       />
+      {toastContainer}
     </PageWrapper>
   );
 };

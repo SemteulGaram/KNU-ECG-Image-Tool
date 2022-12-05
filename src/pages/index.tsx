@@ -1,5 +1,6 @@
 import { NextPage } from 'next';
-import PageWrapper from '../components/common/page-wrapper';
+import React from 'react';
+import PageWrapper from 'src/components/common/page-wrapper';
 import usePageStateRoute from 'src/hooks/usePageStateRoute';
 
 const Home: NextPage<unknown> = () => {
