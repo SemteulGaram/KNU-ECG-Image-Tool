@@ -17,6 +17,7 @@ npm install
 npm run dev:tauri
 
 # Build executable for current device architecture
+# (Maintainer only) set TAURI_PRIVATE_KEY and TAURI_KEY_PASSWORD env variable for generate updater artifacts.
 npm run build:tauri
 
 # More build options
@@ -41,3 +42,6 @@ npm run build:tauri:apple:universal
 - Tailwind CSS
 - Zustand
 - eslint (Prettier)
+
+## 3. Maintainer memo
+- When version change - update both 'package.json', 'src-tauri/tauri.conf.json'

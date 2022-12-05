@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "KNU ECG Image Tool",
-    "version": "1.0.0"
+    "version": "1.0.1"
   },
   "tauri": {
     "allowlist": {
@@ -74,10 +74,12 @@
       "csp": "default-src 'self' data:; img-src 'self' asset: https://asset.localhost; style-src 'self' 'unsafe-inline'; font-src: 'self' data:;"
     },
     "updater": {
-      "active": false,
-      "windows": {
-        "installMode": "passive"
-      }
+      "active": true,
+      "endpoints": [
+        "https://raw.githubusercontent.com/SemteulGaram/KNU-ECG-Image-Tool/master/updater.json"
+      ],
+      "dialog": true,
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEU5RTc0MDJCNzAxQkM2ODMKUldTRHhodHdLMERuNmNEeVRyS2lCOWhDUmdkYm1rakxEak8wbTZSSk9JWno4T3RDMWhzRDJBL0cK"
     },
     "windows": [
       {
