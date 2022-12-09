@@ -44,4 +44,10 @@ npm run build:tauri:apple:universal
 - eslint (Prettier)
 
 ## 3. Maintainer memo
-- When version change - update both 'package.json', 'src-tauri/tauri.conf.json'
+- Update step
+  - Version update both `package.json`, `src-tauri/tauri.conf.json`
+  - Set priv env key
+  - Run build script
+  - Update `updater.json` with hash
+  - git push
+  - Upload Release

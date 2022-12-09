@@ -66,12 +66,11 @@ const ImageClassification: NextPage<unknown> = () => {
         className="image_classification w-full h-full grid"
         css={css`
           grid-template-areas:
-            'preview preview'
-            'imglist imglist'
-            'classlist menu';
+            'preview classlist'
+            'imglist menu';
 
           grid-template-columns: minmax(0, 1fr) 180px;
-          grid-template-rows: minmax(0, 1fr) 112px 112px;
+          grid-template-rows: minmax(0, 1fr) 112px;
         `}
       >
         <div
@@ -79,7 +78,7 @@ const ImageClassification: NextPage<unknown> = () => {
           css={css`
             grid-area: preview;
             background-color: rgba(127, 127, 127, 0.1);
-            box-shadow: inset 0 -10px 5px -5px rgba(127, 127, 127, 0.2);
+            box-shadow: inset -10px -10px 5px -5px rgba(127, 127, 127, 0.2);
           `}
         >
           <ImageClassificationPreview />

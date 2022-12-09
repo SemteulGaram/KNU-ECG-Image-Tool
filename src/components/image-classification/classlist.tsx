@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import React from 'react';
-import Icon from '@mdi/react';
 import {
   IImageFlag,
   ImageFlag,
@@ -56,14 +55,14 @@ const ImageClassificationClasslist: React.FC<Props> = () => {
   }, [keybindToFlag, toggleFlag]);
 
   return (
-    <div className="iccl relative w-full h-full flex flex-row justify-center items-center gap-4">
+    <div className="iccl relative w-full h-full flex flex-col justify-center items-center gap-4">
       {ImageFlag.map((flag) => (
         <button
           key={flag}
           className={
             'iccl' +
             (cImageFlags.includes(flag) ? ' iccl--active' : '') +
-            ' w-20 h-24 flex flex-col justify-center items-center gap-1 rounded-sm text-sm cursor-pointer'
+            ' w-40 h-24 flex flex-col justify-center items-center gap-1 rounded-sm text-xl cursor-pointer'
           }
           title={ImageFlagData[flag].fullname}
           css={css`
@@ -71,7 +70,7 @@ const ImageClassificationClasslist: React.FC<Props> = () => {
             color: ${ImageFlagData[flag].textColor};
             transition: all 0.2s ease-in-out;
             &:hover {
-              transform: translateY(-5%);
+              transform: translateX(-2%);
             }
             &.iccl--active {
               background-color: ${ImageFlagData[flag].highlightColor};
@@ -80,7 +79,7 @@ const ImageClassificationClasslist: React.FC<Props> = () => {
           `}
           onClick={() => toggleFlag(flag as IImageFlag)}
         >
-          <Icon path={ImageFlagData[flag].iconPath} size={2} />
+          {/* <Icon path={ImageFlagData[flag].iconPath} size={2} /> */}
           {`${ImageFlagData[flag].name} (${ImageFlagData[flag].keybind})`}
         </button>
       ))}
