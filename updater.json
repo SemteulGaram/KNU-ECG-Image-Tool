@@ -5,11 +5,11 @@
   "platforms": {
     "windows-x86_64": {
       "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTRHhodHdLMERuNlN0RTR2SzdPNWJVZVNBeDNvZWRqSnZySzZFUkZRK3BZaUgzc3RCb2tkSzNyK0hqYjhGN0lFRGJ1bXh3Z0tCSXdzZVpURkVDaXBwWE5ra2ZZNGU2ckFNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjcwNjAxMTEwCWZpbGU6S05VIEVDRyBJbWFnZSBUb29sXzEuMC40X3g2NF9lbi1VUy5tc2kuemlwCjFUYUczNXVRNkh3NTI2N0NJd1VqL21nRGFzbGlGVlJqeHFBNnc1Qk1FMEhVM0puVklaVnFGelZDU1hUOUJsSHh4amVTWDBYZEpNNmtuZ0gzQk4vR0NnPT0K",
-      "url": "https://github.com/SemteulGaram/KNU-ECG-Image-Tool/releases/download/v1.0.4/KNU ECG Image Tool_1.0.4_x64_en-US.msi.zip"
+      "url": "https://github.com/SemteulGaram/KNU-ECG-Image-Tool/releases/download/v1.0.4/KNU.ECG.Image.Tool_1.0.4_x64_en-US.msi.zip"
     },
     "windows-i686": {
       "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTRHhodHdLMERuNmM2ZS9BQWh4Y3FLUXZVdEVwTEltZGk4RW1OajQycmtoOXJid1NoQWZieWx6WnlFOTdmMWtCSWtPVGpQdHR1ZWF2R0VTa09jLzZTWlFIcjNQTUtsb0FFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjcwNjAxMTYzCWZpbGU6S05VIEVDRyBJbWFnZSBUb29sXzEuMC40X3g4Nl9lbi1VUy5tc2kuemlwCjErS2g4cVFpQXkvVGVEVHRLL0RscGIycVRqU3hzTzdLZ0ZyOWExU2lnUzM0ODY4SkJhTU9ZSWgyQXo4dG5SemY4T29EdFJsUGs1eEJsRFByQ2NrekF3PT0K",
-      "url": "https://github.com/SemteulGaram/KNU-ECG-Image-Tool/releases/download/v1.0.4/KNU ECG Image Tool_1.0.4_x86_en-US.msi.zip"
+      "url": "https://github.com/SemteulGaram/KNU-ECG-Image-Tool/releases/download/v1.0.4/KNU.ECG.Image.Tool_1.0.4_x86_en-US.msi.zip"
     }
   }
 }
