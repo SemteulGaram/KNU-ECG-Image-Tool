@@ -1,15 +1,15 @@
 {
-  "version": "v1.0.3",
-  "notes": "Change: Layout feedback",
-  "pub_date": "2022-12-05T21:00:00Z",
+  "version": "v1.0.4",
+  "notes": "Update: Add Unrecognized class / Fix: Sort file entry and export data",
+  "pub_date": "2022-12-09T00:00:00Z",
   "platforms": {
     "windows-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTRHhodHdLMERuNldrdUJmYVdQMzgramliQ0l6aUZFRXJkODZYdXh3RlgrZ2J0V0JoOWxONGVCUkl2UVZEVFhQaVhpM0ZWVHFtOUhIR3NRWWx6cExXTDlWZklVUGVpbndRPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjcwNTk5OTE0CWZpbGU6S05VIEVDRyBJbWFnZSBUb29sXzEuMC4zX3g2NF9lbi1VUy5tc2kuemlwCnlDeEJvUDNWMUh0VXc3ZVh1cDRZV0RqYzlPTXRub1NlL1poUmVyOFMvd2krT09VQ3RmaWFnbHJRSG5CSGZGaTVNN2RrRjVtaStQb0VqYVpPbnlFVENnPT0K",
-      "url": "https://github.com/SemteulGaram/KNU-ECG-Image-Tool/releases/download/v1.0.3/KNU ECG Image Tool_1.0.3_x64_en-US.msi.zip"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTRHhodHdLMERuNlN0RTR2SzdPNWJVZVNBeDNvZWRqSnZySzZFUkZRK3BZaUgzc3RCb2tkSzNyK0hqYjhGN0lFRGJ1bXh3Z0tCSXdzZVpURkVDaXBwWE5ra2ZZNGU2ckFNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjcwNjAxMTEwCWZpbGU6S05VIEVDRyBJbWFnZSBUb29sXzEuMC40X3g2NF9lbi1VUy5tc2kuemlwCjFUYUczNXVRNkh3NTI2N0NJd1VqL21nRGFzbGlGVlJqeHFBNnc1Qk1FMEhVM0puVklaVnFGelZDU1hUOUJsSHh4amVTWDBYZEpNNmtuZ0gzQk4vR0NnPT0K",
+      "url": "https://github.com/SemteulGaram/KNU-ECG-Image-Tool/releases/download/v1.0.4/KNU ECG Image Tool_1.0.4_x64_en-US.msi.zip"
     },
     "windows-i686": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTRHhodHdLMERuNlZwc3d6aTQ0WVlrSU1XNGtwZE9JVUtuZTRHTzlGUWVWYXRWL2tValY1amF5TzRWVWhoVmRlRXpINnZ2cnRVTHNlU0VkaTJtbWE3RDRZOS9NbkwydlE4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjcwNTk5OTY2CWZpbGU6S05VIEVDRyBJbWFnZSBUb29sXzEuMC4zX3g4Nl9lbi1VUy5tc2kuemlwCkJqc0dHZXJkUzhUalFsME1sQmdFcHZVKzlGY2RMdEIzblZkNHE3WlM1ZHNtSU1MRm1pTU5ITC9MZng2aGZzSk15c3RkOHFLVmoyeGNSUGsvY0h4b0RnPT0K",
-      "url": "https://github.com/SemteulGaram/KNU-ECG-Image-Tool/releases/download/v1.0.3/KNU ECG Image Tool_1.0.3_x86_en-US.msi.zip"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTRHhodHdLMERuNmM2ZS9BQWh4Y3FLUXZVdEVwTEltZGk4RW1OajQycmtoOXJid1NoQWZieWx6WnlFOTdmMWtCSWtPVGpQdHR1ZWF2R0VTa09jLzZTWlFIcjNQTUtsb0FFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjcwNjAxMTYzCWZpbGU6S05VIEVDRyBJbWFnZSBUb29sXzEuMC40X3g4Nl9lbi1VUy5tc2kuemlwCjErS2g4cVFpQXkvVGVEVHRLL0RscGIycVRqU3hzTzdLZ0ZyOWExU2lnUzM0ODY4SkJhTU9ZSWgyQXo4dG5SemY4T29EdFJsUGs1eEJsRFByQ2NrekF3PT0K",
+      "url": "https://github.com/SemteulGaram/KNU-ECG-Image-Tool/releases/download/v1.0.4/KNU ECG Image Tool_1.0.4_x86_en-US.msi.zip"
     }
   }
 }

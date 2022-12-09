@@ -2,6 +2,7 @@ import create from 'zustand';
 import * as XLSX from 'xlsx';
 import { toast as _toast } from 'react-toastify';
 import {
+  mdiHelp,
   mdiPageFirst,
   mdiPageLast,
   mdiPulse,
@@ -11,13 +12,14 @@ import {
 import { extensionChecker } from 'src/utils/extension-checker';
 import { getTauriModule } from 'src/tauri/lazy-api';
 
-export type IImageFlag = '0' | '1' | '2' | '3' | '4';
+export type IImageFlag = '0' | '1' | '2' | '3' | '4' | '5';
 export const ImageFlag: IImageFlag[] = [
   '0', // NSR
   '1', // LBBB
   '2', // RBBB
   '3', // AF
   '4', // Acute mi
+  '5', // Unrecognized
 ];
 export type IImageFlagData = {
   name: string;
@@ -78,6 +80,16 @@ export const ImageFlagData: Record<IImageFlag, IImageFlagData> = {
     color: '#cccccc',
     textColor: '#000000',
     highlightColor: '#4477ff',
+    highlightTextColor: '#ffffff',
+  },
+  '5': {
+    name: 'Unrecognized',
+    fullname: 'Unrecognized',
+    iconPath: mdiHelp,
+    keybind: '6',
+    color: '#cccccc',
+    textColor: '#000000',
+    highlightColor: '#444444',
     highlightTextColor: '#ffffff',
   },
 };
@@ -197,6 +209,18 @@ export const useAppStore = create<AppStore>((set, get) => ({
           }
         }
       };
+      // sort by path ASC
+      fileEntry.sort((a, b) => {
+        const aPath = String(a.path).toLowerCase();
+        const bPath = String(b.path).toLowerCase();
+        if (aPath < bPath) {
+          return -1;
+        }
+        if (aPath > bPath) {
+          return 1;
+        }
+        return 0;
+      });
       getAllFiles(fileEntry);
       // TODO: remove . ?
       const imageList = fileList
